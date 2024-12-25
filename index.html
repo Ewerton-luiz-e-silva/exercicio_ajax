@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Define o conjunto de caracteres como UTF-8 -->
+    <meta charset="UTF-8">
+    <!-- Garante a compatibilidade com navegadores mais antigos -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Define a largura do viewport para ser igual à largura do dispositivo, e escala inicial de 1.0 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título da página que será exibido na aba do navegador -->
+    <title>Meu Github</title>
+    <!-- Link para o arquivo de estilos CSS externo -->
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <!-- Exibe a imagem do avatar do perfil -->
+            <img class="profile-avatar" src="./" id="avatar" alt="Avatar do perfil">
+            <!-- Nome do usuário do perfil -->
+            <h1 class="profile-name" id="name">Ewerton Luiz</h1>
+            <!-- Nome de usuário no formato @username -->
+            <h2 class="profile-username" id="username">@ewerton</h2>
+            <!-- Lista de números estatísticos do perfil -->
+            <ul class="numbers">
+                <li class="numbers-item">
+                    <!-- Quantidade de repositórios públicos -->
+                    <h4>Repositórios</h4>
+                    <span id="repos"></span>
+                </li>
+                <li class="numbers-item">
+                    <!-- Quantidade de seguidores -->
+                    <h4>Seguidores</h4>
+                    <span id="followers"></span>
+                </li>
+                <li class="numbers-item">
+                    <!-- Quantidade de perfis seguidos -->
+                    <h4>Seguindo</h4>
+                    <span id="following"></span>
+                </li>
+            </ul>
+            <!-- Link para abrir o perfil no GitHub -->
+            <a href="#" id="link" class="profile-link" target="_blank">Ver no Github</a>
+        </div>
+    </header>
+
+    <script>
+        // Aguarda o carregamento completo do DOM antes de executar o script
+        document.addEventListener('DOMContentLoaded', function() {
+            // Seleciona elementos do DOM para exibir as informações do perfil
+            const nameElement = document.querySelector('#name');
+            const usernameElement = document.querySelector('#username');
+            const avatarElement = document.querySelector('#avatar');
+            const reposElement = document.querySelector('#repos');
+            const followersElement = document.querySelector('#followers');
+            const followingElement = document.querySelector('#following');
+            const linkElement = document.querySelector('#link');
+    
+            // Busca as informações do perfil do usuário no GitHub através da API
+            fetch('https://api.github.com/users/Ewerton-luiz-e-silva')
+                .then(function(res) {
+                    // Converte a resposta para JSON
+                    return res.json();
+                })
+                .then(function(json) {
+                    // Atualiza o nome do perfil ou exibe o login caso o nome seja nulo
+                    nameElement.innerText = json.name || json.login;
+                    // Exibe o nome de usuário com o prefixo "@"
+                    usernameElement.innerText = `@${json.login}`;
+                    // Atualiza o avatar com a URL fornecida pela API
+                    avatarElement.src = json.avatar_url;
+                    // Exibe o número de seguidores
+                    followersElement.innerText = json.followers;
+                    // Exibe o número de perfis que o usuário está seguindo
+                    followingElement.innerText = json.following;
+                    // Exibe o número de repositórios públicos
+                    reposElement.innerText = json.public_repos;
+                    // Atualiza o link para redirecionar para o perfil do GitHub
+                    linkElement.href = json.html_url;
+                })
+                .catch(function(error) {
+                    // Loga um erro no console caso a requisição falhe
+                    console.error('Erro ao buscar os dados do GitHub:', error);
+                });
+        });
+    </script>
+</body>
+</html>
+
